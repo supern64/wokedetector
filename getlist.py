@@ -10,7 +10,7 @@ mapping = {
 }
 
 # discover size
-size_r = requests.get(main_url + "&count=2")
+size_r = requests.get(main_url + "&count=1")
 size = size_r.json()["total_count"]
 
 print(f"Downloading list of {size} games")
@@ -21,12 +21,15 @@ if list_j["success"] != 1:
     exit(1)
 
 print("Parsing data for games")
-with open("data.csv", "w+") as file:
-    file.write("appid,woke\n")
+with open("data.csv", "w+", encoding="utf-8") as file:
+    file.write("appid,name,banner,woke,description\n")
 
     soup = BeautifulSoup(list_j["results_html"], "html.parser")
     for rec in soup.find_all(class_="recommendation"):
-        id = rec.div.a["data-ds-appid"]
+        id = rec.a["data-ds-appid"]
+        name = rec.a.img["alt"].replace('"','""')
+        banner = rec.a.img["src"]
         woke = mapping[rec.span["class"][0]]
-        file.write(f"{id},{woke}\n")
+        description = rec.find(class_="recommendation_desc").text.strip().replace('"','""')
+        file.write(f"{id},\"{name}\",\"{banner}\",{woke},\"{description}\"\n")
 print("Done")
