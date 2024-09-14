@@ -27,9 +27,10 @@ export async function load({ params, fetch }) {
     }
 
     // find REAL steamid
+    const url_match = params.id.match(/[0-9]{17}/)
     let sid;
     try {
-        sid = new SteamID(params.id)
+        sid = new SteamID(url_match ? url_match[0] : params.id)
     } catch (e) {
         try {
             sid = new SteamID(await Resolver.customUrlToSteamID64(params.id))
@@ -75,10 +76,10 @@ export async function load({ params, fetch }) {
                 wokeCount += 1;
                 break;
             case WokeLevel.SLIGHTLY_WOKE:
-                slightlyWokeCount += 0;
+                slightlyWokeCount += 1;
                 break;
             case WokeLevel.NOT_WOKE:
-                notWokeCount += 0;
+                notWokeCount += 1;
                 break;
         }
         gameList.push(gameInfo)

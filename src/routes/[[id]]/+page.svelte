@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+    import { goto } from "$app/navigation";
     /** @type {import('./$types').PageData} */
 	export let data;
     import { page } from "$app/stores";
@@ -11,7 +12,15 @@
         wokePercentage = games.count.woke/games.count.counted*100;
         slightlyWokePercentage = games.count.slightly_woke/games.count.counted*100;
     }
+
+    /** @type {HTMLAnchorElement} */
+    let button: HTMLAnchorElement;
     
+    function decodeHtml(html: string) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }
 </script>
 <div class="pad-l">
     <center>
@@ -19,9 +28,9 @@
         find out today with our special WOKE DETECTOR!!!
         <div class="center-box">
             <form>
-                <label for="steamid">enter ur steamid/custom url here:</label>
-                <input type="text" class="textbox" id="steamid" bind:value={steamid}>
-                <a href={"/" + encodeURIComponent(steamid)} class="btn">REVEAL</a>
+                <label for="steamid">enter ur steamid/profile url here:</label>
+                <input type="text" class="textbox" id="steamid" bind:value={steamid} on:keypress={(k) => k.key === "Enter" && button.click()}>
+                <a href={"/" + encodeURIComponent(steamid)} bind:this={button} id="reveal" class="btn">REVEAL</a>
             </form>
             (if you're not sure check <a href="https://steamdb.info/calculator/" target="_blank">SteamDB</a> and get the "SteamID" from there)
         </div>
@@ -31,18 +40,18 @@
                 {#if data.found && data.info}
                 <div>
                     <img src={data.info.avatar} alt={data.info.name + "'s Steam Avatar"} class="avatar">
-                    <span style="font-weight: bold; font-size: 1.7rem; margin-left: 0.5rem; vertical-align: middle;">{data.info.name}'s Profile</span>
+                    <span style="font-weight: bold; font-size: 1.7rem; margin-left: 0.5rem; vertical-align: middle;">{decodeHtml(data.info.name)}'s Profile</span>
                 </div>
                 {#if games}
                 <h2>Result: 
-                    {#if wokePercentage > 70}
+                    {#if wokePercentage > 70 || wokePercentage + slightlyWokePercentage > 80}
                     <span style="color: #ff0000">WOKE!!!!!</span>
                     {:else if wokePercentage + slightlyWokePercentage > 50}
                     <span style="color: #ffff00">SLIGHTLY WOKE...</span>
                     {:else}
                     <span style="color: #00ff00">NOT WOKE!!</span>
                     {/if}
-                    ({wokePercentage.toFixed(2)}%)
+                    ({wokePercentage.toFixed(2)}% woke + {slightlyWokePercentage.toFixed(2)}% slightly woke)
                 </h2>
                 {:else}
                 sorry, we couldn't obtain this player's games. try checking privacy settings.
@@ -69,7 +78,7 @@
             </thead>
             {#each games.list as { name, banner, woke, description }}
             <tr>
-                <th scope="row">{name}</th>
+                <th scope="row">{decodeHtml(name)}</th>
                 <td><img src={banner} alt={"Banner for game " + name}></td>
                 <td>
                     {#if woke == "-1"}
@@ -81,7 +90,7 @@
                     {/if}
                 </td>
                 <td>
-                    {description}
+                    {decodeHtml(description)}
                 </td>
             </tr>
             {/each}
@@ -91,7 +100,7 @@
 </div>
 
 <footer>
-    *i am not associated with the woke content detector steam group, nor do i endorse any of the comments in it.
+    *i am not associated with the woke content detector steam group, nor do i endorse any of the comments in it. this website was made as a joke.
 </footer>
 
 <style>
