@@ -79,9 +79,9 @@
                 </div>
                 {#if games}
                 <h2>Result: 
-                    {#if wokePercentage > 70 || wokePercentage + slightlyWokePercentage > 80}
+                    {#if wokePercentage > 65 || wokePercentage + slightlyWokePercentage > 75}
                     <span style="color: #ff0000">WOKE!!!!!</span>
-                    {:else if wokePercentage + slightlyWokePercentage > 50}
+                    {:else if wokePercentage > 40 || wokePercentage + slightlyWokePercentage > 50}
                     <span style="color: #e0c600">SLIGHTLY WOKE...</span>
                     {:else}
                     <span style="color: #00ff00">NOT WOKE!!</span>
