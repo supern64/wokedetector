@@ -89,7 +89,7 @@
                     <span style="color: #e0c600">SLIGHTLY WOKE...</span>
                     {:else}
                     <span style="color: #00ff00">NOT WOKE!!</span>
-                    {/if}
+                    {/if}<br>
                     ({wokePercentage.toFixed(2)}% woke + {slightlyWokePercentage.toFixed(2)}% slightly woke)
                 </h2>
                 {:else}
@@ -109,16 +109,19 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Banner</th>
+                    <th scope="col">Game</th>
                     <th scope="col">Wokeness</th>
                     <th scope="col">Description</th>
                 </tr>
             </thead>
             {#each games.list as { name, banner, woke, description }}
             <tr>
-                <th scope="row">{decode(name)}</th>
-                <td><img src={banner} class="banner" alt={"Banner for game " + name}></td>
+                <th scope="row">
+                    {decode(name)}
+                    <div style="margin-top: 0.5rem;">
+                        <img src={banner} class="banner" alt={"Banner for game " + name}>
+                    </div>
+                </th>
                 <td>
                     {#if woke == "-1"}
                     <span style="color: #ff0000">Woke</span>
@@ -154,7 +157,7 @@
     .center-box {
         border: solid black 2px;
         padding: 1rem;
-        margin: 1rem;
+        margin: 1rem auto;
         border-radius: 5px;
         width: fit-content;
     }
@@ -193,9 +196,7 @@
         .banner {
             max-width: 100px;
         }
-        table {
-            width: 80vw;
-        }
+
         .pad-l {
             margin: 1rem;
         }
@@ -203,6 +204,9 @@
             display: inline-block;
             margin-top: 1rem;
             margin-bottom: 1rem;
+        }
+        th, td {
+            padding: 0.2rem;
         }
     }
 </style>
