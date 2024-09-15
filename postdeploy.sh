@@ -3,4 +3,4 @@
 cp ../.env .
 bun install
 bun run build
-pm2 reload ecosystem.config.cjs --env production
+pm2 reload ecosystem.config.cjs
