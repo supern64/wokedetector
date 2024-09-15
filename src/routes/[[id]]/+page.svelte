@@ -20,7 +20,7 @@
 <svelte:head>
     {#if data.found && games}
     <!-- Primary Meta Tags -->
-    <title>how WOKE are {data.info.name} games???</title>
+    <title>how WOKE are {data.info.name}'s games???</title>
     <meta name="title" content="how WOKE are {data.info.name}'s games???" />
     <meta name="description" content="find out how woke {data.info.name}'s steam library is today!!" />
 
