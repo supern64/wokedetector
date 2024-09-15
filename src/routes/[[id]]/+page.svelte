@@ -192,6 +192,9 @@
         border: 1px solid black;
         padding: 0.5rem;
     }
+    .banner {
+        max-width: 200px;
+    }
     @media only screen and (max-width: 768px) {
         .banner {
             max-width: 100px;
