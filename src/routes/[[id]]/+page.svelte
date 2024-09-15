@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
+    import he from 'he';
+    const { decode } = he;
     /** @type {import('./$types').PageData} */
 	export let data;
     import { page } from "$app/stores";
@@ -15,12 +16,6 @@
 
     /** @type {HTMLAnchorElement} */
     let button: HTMLAnchorElement;
-    
-    function decodeHtml(html: string) {
-        var txt = document.createElement("textarea");
-        txt.innerHTML = html;
-        return txt.value;
-    }
 </script>
 <div class="pad-l">
     <center>
@@ -40,7 +35,7 @@
                 {#if data.found && data.info}
                 <div>
                     <img src={data.info.avatar} alt={data.info.name + "'s Steam Avatar"} class="avatar">
-                    <span style="font-weight: bold; font-size: 1.7rem; margin-left: 0.5rem; vertical-align: middle;">{decodeHtml(data.info.name)}'s Profile</span>
+                    <span style="font-weight: bold; font-size: 1.7rem; margin-left: 0.5rem; vertical-align: middle;">{decode(data.info.name)}'s Profile</span>
                 </div>
                 {#if games}
                 <h2>Result: 
@@ -78,7 +73,7 @@
             </thead>
             {#each games.list as { name, banner, woke, description }}
             <tr>
-                <th scope="row">{decodeHtml(name)}</th>
+                <th scope="row">{decode(name)}</th>
                 <td><img src={banner} alt={"Banner for game " + name}></td>
                 <td>
                     {#if woke == "-1"}
@@ -90,7 +85,7 @@
                     {/if}
                 </td>
                 <td>
-                    {decodeHtml(description)}
+                    {decode(description)}
                 </td>
             </tr>
             {/each}

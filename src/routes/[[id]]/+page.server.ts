@@ -1,9 +1,8 @@
 import SteamID from "steamid";
 import * as Resolver from "steamid-resolver";
 import { parse } from "csv-parse/sync";
-
+import { STEAM_API_KEY } from "$env/static/private";
 const STEAM_API_URL = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=KEY&steamid=STEAMID"
-
 
 
 enum WokeLevel {
@@ -48,7 +47,7 @@ export async function load({ params, fetch, platform }) {
     }
 
     // and now, time for their games
-    const url = STEAM_API_URL.replace("KEY", platform!.env.STEAM_API_KEY).replace("STEAMID", sid64);
+    const url = STEAM_API_URL.replace("KEY", STEAM_API_KEY).replace("STEAMID", sid64);
     const res = await (await fetch(url)).json();
     
     if (!res.response.games) {
