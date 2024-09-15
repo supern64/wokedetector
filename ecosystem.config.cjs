@@ -1,5 +1,3 @@
-require("dotenv/config");
-
 module.exports = {
   apps: [{
     name: "wokedetector",
@@ -20,7 +18,7 @@ module.exports = {
       path: '/var/www/wokedetector',
       
       'pre-deploy-local': '',
-      'post-deploy' : '/home/node/.bun/bin/bun install && ls -la && /home/node/.bun/bin/bun run build && pm2 reload ecosystem.config.cjs --env production',
+      'post-deploy' : 'cp ../.env . && /home/node/.bun/bin/bun install && /home/node/.bun/bin/bun run build && pm2 reload ecosystem.config.cjs --env production',
       'pre-setup': '',
       ssh_options: "StrictHostKeyChecking=no",
     }
