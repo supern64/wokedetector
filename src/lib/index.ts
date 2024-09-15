@@ -1,1 +1,7 @@
-// place files you want to import through the `$lib` alias in this folder.
+export interface GameData {
+    appid: string,
+    name: string,
+    banner: string,
+    woke: string,
+    description: string
+}

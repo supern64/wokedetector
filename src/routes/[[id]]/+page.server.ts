@@ -2,6 +2,7 @@ import SteamID from "steamid";
 import * as Resolver from "steamid-resolver";
 import { parse } from "csv-parse/sync";
 import { STEAM_API_KEY } from "$env/static/private";
+import type { GameData } from "$lib";
 const STEAM_API_URL = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=KEY&steamid=STEAMID"
 
 
@@ -12,7 +13,7 @@ enum WokeLevel {
 }
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ params, fetch, platform }) {
+export async function load({ params, fetch }) {
     const lastUpdate = await (await fetch("/last_update.txt")).text();
 
     // rejection
@@ -62,7 +63,7 @@ export async function load({ params, fetch, platform }) {
         columns: true,
         skip_empty_lines: true,
         objname: "appid"
-    });
+    }) as {[key: string]: GameData};
 
     const gameList = [];
     let wokeCount = 0, slightlyWokeCount = 0, notWokeCount = 0, ignoredGames = 0;
