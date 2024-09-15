@@ -17,6 +17,46 @@
     /** @type {HTMLAnchorElement} */
     let button: HTMLAnchorElement;
 </script>
+<svelte:head>
+    {#if data.found && games}
+    <!-- Primary Meta Tags -->
+    <title>how WOKE are {data.info.name} games???</title>
+    <meta name="title" content="how WOKE are {data.info.name}'s games???" />
+    <meta name="description" content="find out how woke {data.info.name}'s steam library is today!!" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://wokedetector.cirnoslab.me/{steamid}" />
+    <meta property="og:title" content="how WOKE are {data.info.name}'s games???" />
+    <meta property="og:description" content="find out how woke {data.info.name}'s steam library is today!!" />
+    <meta property="og:image" content="{data.info.avatar}" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://wokedetector.cirnoslab.me/{steamid}" />
+    <meta property="twitter:title" content="how WOKE are {data.info.name}'s games???" />
+    <meta property="twitter:description" content="find out how woke {data.info.name}'s steam library is today!!" />
+    <meta property="twitter:image" content="{data.info.avatar}" />
+    {:else}
+    <title>how WOKE are your games???</title>
+    <meta name="title" content="how WOKE are your games???" />
+    <meta name="description" content="find out how woke your steam library is today with this simple tool!!" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://wokedetector.cirnoslab.me" />
+    <meta property="og:title" content="how WOKE are your games???" />
+    <meta property="og:description" content="find out how woke your steam library is today with this simple tool!!" />
+    <meta property="og:image" content="https://wokedetector.cirnoslab.me/favicon.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://wokedetector.cirnoslab.me" />
+    <meta property="twitter:title" content="how WOKE are your games???" />
+    <meta property="twitter:description" content="find out how woke your steam library is today with this simple tool!!" />
+    <meta property="twitter:image" content="https://wokedetector.cirnoslab.me/favicon.png" />
+    {/if}
+</svelte:head>
 <div class="pad-l">
     <center>
         <h1>how WOKE are your games???</h1>
@@ -74,7 +114,7 @@
             {#each games.list as { name, banner, woke, description }}
             <tr>
                 <th scope="row">{decode(name)}</th>
-                <td><img src={banner} alt={"Banner for game " + name}></td>
+                <td><img src={banner} class="banner" alt={"Banner for game " + name}></td>
                 <td>
                     {#if woke == "-1"}
                     <span style="color: #ff0000">Woke</span>
@@ -127,7 +167,6 @@
         padding: 0.5rem;
         font-size: 1.2rem;
         border-radius: 5px;
-        
     }
     .btn:hover {
         background-color: rgb(65, 92, 143);
@@ -144,5 +183,21 @@
     th, td {
         border: 1px solid black;
         padding: 0.5rem;
+    }
+    @media only screen and (max-width: 768px) {
+        .banner {
+            max-width: 100px;
+        }
+        table {
+            width: 80vw;
+        }
+        .pad-l {
+            margin: 1rem;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
     }
 </style>
