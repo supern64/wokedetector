@@ -34,6 +34,11 @@
                     name: value.name,
                     banner: value.banner
                 })
+            },
+            plugins: {
+                filter: {
+                    getFilterValue: (item) => item.name
+                }
             }
         }),
         table.column({
@@ -44,6 +49,9 @@
                     fn: ({ filterValue, value }) => {
                         return filterValue == null || filterValue === value
                     }
+                },
+                filter: {
+                    exclude: true
                 }
             },
             cell: ({ value }) => {
