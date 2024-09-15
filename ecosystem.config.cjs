@@ -18,7 +18,7 @@ module.exports = {
       path: '/var/www/wokedetector',
       
       'pre-deploy-local': '',
-      'post-deploy' : 'chmod +x postdeploy.sh update-and-rebuild.sh && ./postdeploy.sh',
+      'post-deploy' : 'chmod +x postdeploy.sh update.sh && ./postdeploy.sh',
       'pre-setup': '',
       ssh_options: "StrictHostKeyChecking=no",
     }
