@@ -31,7 +31,8 @@
 <div class="pad-l">
     <center>
         <h1>The Woke Ranking</h1>
-        (according to the woke content detector steam group)
+        (according to the woke content detector steam group)<br>
+        <footer>csv available <a data-sveltekit-reload href="/data.csv">here</a>, last updated {dayjs(data.lastUpdate).fromNow()}</footer>
     </center>
     <div>
         <h2>Games List ({data.games.length} total)</h2>
