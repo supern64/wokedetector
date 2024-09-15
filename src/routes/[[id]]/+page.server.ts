@@ -13,15 +13,11 @@ enum WokeLevel {
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, fetch, platform }) {
-    const GAMES = parse(await (await fetch("/data.csv")).text(), {
-        columns: true,
-        skip_empty_lines: true,
-        objname: "appid"
-    });
+    const lastUpdate = await (await fetch("/last_update.txt")).text();
 
     // rejection
 	if (!params.id) {
-        return {found: false}
+        return {found: false, lastUpdate}
     }
 
     // find REAL steamid
@@ -33,7 +29,7 @@ export async function load({ params, fetch, platform }) {
         try {
             sid = new SteamID(await Resolver.customUrlToSteamID64(params.id))
         } catch (e) {
-            return {found: false}
+            return {found: false, lastUpdate}
         }
     }
     
@@ -43,7 +39,7 @@ export async function load({ params, fetch, platform }) {
     try {
         playerInfo = await Resolver.steamID64ToFullInfo(sid64);
     } catch (e) {
-        return {found: false}
+        return {found: false, lastUpdate}
     }
 
     // and now, time for their games
@@ -57,9 +53,16 @@ export async function load({ params, fetch, platform }) {
                 name: playerInfo.steamID[0],
                 avatar: playerInfo.avatarFull[0]
             },
-            games: null
+            games: null,
+            lastUpdate
         }
     }
+
+    const GAMES = parse(await (await fetch("/data.csv")).text(), {
+        columns: true,
+        skip_empty_lines: true,
+        objname: "appid"
+    });
 
     const gameList = [];
     let wokeCount = 0, slightlyWokeCount = 0, notWokeCount = 0, ignoredGames = 0;
@@ -97,7 +100,8 @@ export async function load({ params, fetch, platform }) {
                 not_woke: notWokeCount
             },
             list: gameList
-        }
+        },
+        lastUpdate
     }
     
 

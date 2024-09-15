@@ -1,5 +1,9 @@
 <script lang="ts">
     import he from 'he';
+    import dayjs from 'dayjs';
+    import relativeTime from 'dayjs/plugin/relativeTime';
+
+    dayjs.extend(relativeTime);
     const { decode } = he;
     /** @type {import('./$types').PageData} */
 	export let data;
@@ -135,6 +139,7 @@
 </div>
 
 <footer>
+    list last updated on {dayjs(data.lastUpdate).toDate().toLocaleDateString()} ({dayjs(data.lastUpdate).fromNow()})<br>
     *i am not associated with the woke content detector steam group, nor do i endorse any of the comments in it. this website was made as a joke.
 </footer>
 

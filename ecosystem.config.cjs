@@ -18,7 +18,7 @@ module.exports = {
       path: '/var/www/wokedetector',
       
       'pre-deploy-local': '',
-      'post-deploy' : 'cp ../.env . && bun install && bun run build && pm2 reload ecosystem.config.cjs --env production',
+      'post-deploy' : 'chmod +x postdeploy.sh update-and-rebuild.sh && ./postdeploy.sh',
       'pre-setup': '',
       ssh_options: "StrictHostKeyChecking=no",
     }

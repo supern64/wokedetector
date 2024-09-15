@@ -43,7 +43,8 @@ fetch(mainUrl + "&count=1")
         });
 
         // Write to CSV file
-        fs.writeFileSync("data.csv", "appid,name,banner,woke,description\n" + games.join('\n'), 'utf-8');
+        fs.writeFileSync("static/data.csv", "appid,name,banner,woke,description\n" + games.join('\n'), 'utf-8');
+        fs.writeFileSync("static/last_update.txt", (new Date()).toISOString(), 'utf-8');
         console.log("Done");
     })
     .catch(error => {

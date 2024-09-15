@@ -22,3 +22,4 @@ vite.config.ts.timestamp-*
 
 # Games list
 data.csv
+last_update.txt
