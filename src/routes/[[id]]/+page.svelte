@@ -82,7 +82,7 @@
                     {#if wokePercentage > 70 || wokePercentage + slightlyWokePercentage > 80}
                     <span style="color: #ff0000">WOKE!!!!!</span>
                     {:else if wokePercentage + slightlyWokePercentage > 50}
-                    <span style="color: #e5cf00">SLIGHTLY WOKE...</span>
+                    <span style="color: #e0c600">SLIGHTLY WOKE...</span>
                     {:else}
                     <span style="color: #00ff00">NOT WOKE!!</span>
                     {/if}
@@ -119,7 +119,7 @@
                     {#if woke == "-1"}
                     <span style="color: #ff0000">Woke</span>
                     {:else if woke == "0"}
-                    <span style="color: #e5cf00">Slightly Woke</span>
+                    <span style="color: #e0c600">Slightly Woke</span>
                     {:else}
                     <span style="color: #00ff00">Not Woke</span>
                     {/if}
