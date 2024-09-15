@@ -142,7 +142,7 @@
 </div>
 
 <footer>
-    list last updated on {dayjs(data.lastUpdate).toDate().toLocaleString()} ({dayjs(data.lastUpdate).fromNow()})<br>
+    list last updated on {dayjs(data.lastUpdate).toDate().toLocaleString()} ({dayjs(data.lastUpdate).fromNow()}), you can view the full list <a href="/full-list">here</a><br>
     *i am not associated with the woke content detector steam group, nor do i endorse any of the comments in it. this website was made as a joke.
 </footer>
 
