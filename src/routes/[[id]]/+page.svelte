@@ -94,7 +94,7 @@
                     ({wokePercentage.toFixed(2)}% woke + {slightlyWokePercentage.toFixed(2)}% slightly woke)
                 </h2>
                 {:else}
-                sorry, we couldn't obtain this player's games. try checking privacy settings.
+                sorry, we couldn't obtain this player's games. try checking privacy settings.<br>(games have to be set to public for this to work)
                 {/if}
                     
                 {:else}
