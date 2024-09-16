@@ -5,7 +5,8 @@ module.exports = {
     watch: '.',
     env: {
       PORT: 4000,
-      ORIGIN: "https://wokedetector.cirnoslab.me"
+      ORIGIN: "https://wokedetector.cirnoslab.me",
+      NODE_ENV: "production"
     }
   }],
 
@@ -16,11 +17,11 @@ module.exports = {
       ref: 'origin/master',
       repo: 'git@github.com:supern64/wokedetector.git',
       path: '/var/www/wokedetector',
+      key: 'deploy.key',
       
       'pre-deploy-local': '',
       'post-deploy' : 'chmod +x postdeploy.sh update.sh && ./postdeploy.sh',
-      'pre-setup': '',
-      ssh_options: "StrictHostKeyChecking=no",
+      'pre-setup': ''
     }
   }
 };
