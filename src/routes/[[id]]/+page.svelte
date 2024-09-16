@@ -8,6 +8,7 @@
     /** @type {import('./$types').PageData} */
 	export let data;
     import { page } from "$app/stores";
+    import GameTable from '$lib/gameTable.svelte';
     let steamid = $page.params.id ? $page.params.id : ""
 
     $: games = data.games;
@@ -105,38 +106,8 @@
     {#if games}
     <div>
         <h2>Games List</h2>
-        counted {games.count.counted} out of {games.count.all} games ({(games.count.counted/games.count.all*100).toFixed(2)}%)
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Game</th>
-                    <th scope="col">Wokeness</th>
-                    <th scope="col">Description</th>
-                </tr>
-            </thead>
-            {#each games.list as { name, banner, woke, description }}
-            <tr>
-                <th scope="row">
-                    {decode(name)}
-                    <div style="margin-top: 0.5rem;">
-                        <img src={banner} class="banner" alt={"Banner for game " + name}>
-                    </div>
-                </th>
-                <td>
-                    {#if woke == "-1"}
-                    <span style="color: #ff0000">Woke</span>
-                    {:else if woke == "0"}
-                    <span style="color: #e0c600">Slightly Woke</span>
-                    {:else}
-                    <span style="color: #00ff00">Not Woke</span>
-                    {/if}
-                </td>
-                <td>
-                    {decode(description)}
-                </td>
-            </tr>
-            {/each}
-        </table>
+        <footer style="margin-bottom: 0.5rem;">(counted {games.count.counted}/{games.count.all} games or {(games.count.counted/games.count.all*100).toFixed(2)}%)</footer>
+        <GameTable paginate={false} games={games.list} />
     </div>
     {/if}
 </div>
