@@ -1,8 +1,9 @@
 <script lang="ts">
     import he from 'he';
-    import { readable } from 'svelte/store';
+    import Fuse from 'fuse.js';
+    import { writable } from 'svelte/store';
     import { createTable, createRender, Subscribe, Render } from "svelte-headless-table";
-    import { addTableFilter, addPagination, addColumnFilters } from "svelte-headless-table/plugins"
+    import { addPagination, addColumnFilters } from "svelte-headless-table/plugins"
     import type { GameData } from '$lib';
     import Title from '$lib/title.svelte';
     import Woke from '$lib/woke.svelte';
@@ -10,11 +11,18 @@
     export let games: GameData[];
     export let paginate = true;
 
+    $: filterValue = "";
+    const fuse = new Fuse(games, {
+        keys: ["name"],
+        threshold: 0.35,
+        minMatchCharLength: 1
+    });
     const {decode} = he;
-    const dataStore = readable(games as GameData[]);
+    const dataStore = writable(games as GameData[]);
 
+    $: $dataStore = filterValue.length != 0 ? fuse.search(filterValue).map((i) => i.item) : games;
+    
     const table = createTable(dataStore, {
-        filter: addTableFilter(),
         colFilter: addColumnFilters(),
         paginate: addPagination({ initialPageSize: paginate ? 20 : games.length })
     });
@@ -28,11 +36,6 @@
                     name: value.name,
                     banner: value.banner
                 })
-            },
-            plugins: {
-                filter: {
-                    getFilterValue: (item) => item.name
-                }
             }
         }),
         table.column({
@@ -43,9 +46,6 @@
                     fn: ({ filterValue, value }) => {
                         return filterValue == null || filterValue === value
                     }
-                },
-                filter: {
-                    exclude: true
                 }
             },
             cell: ({ value }) => {
@@ -62,13 +62,12 @@
     ]);
     
     const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates } = table.createViewModel(columns);
-    const { filterValue } = pluginStates.filter;
-    const { pageIndex, pageSize, pageCount, hasNextPage, hasPreviousPage } = pluginStates.paginate;
+    const { pageIndex, pageCount, hasNextPage, hasPreviousPage } = pluginStates.paginate;
     const { filterValues } = pluginStates.colFilter;
 </script>
 
 <div style="margin-bottom: 1rem; display: flex; gap: 1rem; flex-direction: row;">
-    <input type="text" class="textbox" style="flex: 1" id="search" placeholder="Search A Game" bind:value={$filterValue}>
+    <input type="text" class="textbox" style="flex: 1" id="search" placeholder="Search A Game" bind:value={filterValue}>
     <select id="wokeness" class="textbox" bind:value={$filterValues.woke}>
         <option value={null}>None</option>
         <option value="1">Not Woke</option>
