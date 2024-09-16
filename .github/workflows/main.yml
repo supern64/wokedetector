@@ -26,4 +26,4 @@ jobs:
         run: bun add pm2
 
       - name: Deploy
-        run: env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.cjs production
+        run: pm2 deploy ecosystem.config.cjs production
