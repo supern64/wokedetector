@@ -21,9 +21,5 @@ jobs:
           SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
 
-
-      - name: Install PM2
-        run: bun add pm2
-
       - name: Deploy
-        run: pm2 deploy ecosystem.config.cjs production
+        run: bunx pm2 deploy ecosystem.config.cjs production
