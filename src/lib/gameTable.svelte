@@ -120,7 +120,7 @@
     </tbody>
 </table>
 {#if paginate}
-<div style="margin-bottom: 1rem; display: flex; gap: 1rem; justify-content: center; align-items: center;">
+<div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; align-items: center;">
     <button class="btn" disabled={!$hasPreviousPage} on:click={() => {if ($hasPreviousPage) $pageIndex -= 1}}>Previous</button>
     <span>Page {$pageIndex + 1} of {$pageCount}</span>
     <button class="btn" disabled={!$hasNextPage} on:click={() => {if ($hasNextPage) $pageIndex += 1; window.scrollTo(0, 0)}}>Next</button>
