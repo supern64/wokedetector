@@ -91,8 +91,18 @@
                     {:else}
                     <span style="color: #00ff00">NOT WOKE!!</span>
                     {/if}<br>
-                    ({wokePercentage.toFixed(2)}% woke + {slightlyWokePercentage.toFixed(2)}% slightly woke)
                 </h2>
+                <div class="bar">
+                    <div class="woke tooltip" style:width="{wokePercentage}%">
+                        <div class="target">Woke: {wokePercentage.toFixed(2)}%</div>
+                    </div>
+                    <div class="slightly tooltip" style:width="{slightlyWokePercentage}%">
+                        <div class="target">Slightly: {slightlyWokePercentage.toFixed(2)}%</div>
+                    </div>
+                    <div class="notwoke tooltip" style:width="{100 - (wokePercentage + slightlyWokePercentage)}%">
+                        <div class="target">Not Woke: {(100 - (wokePercentage + slightlyWokePercentage)).toFixed(2)}%</div>
+                    </div>
+                </div>
                 {:else}
                 sorry, we couldn't obtain this player's games. try checking privacy settings.<br>(games have to be set to public for this to work)
                 {/if}

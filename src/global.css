@@ -54,6 +54,64 @@ th, td {
 .banner {
     max-width: 200px;
 }
+.bar {
+    background-color: gray;
+    width: 80%;
+    height: 2rem;
+    border-radius: 5px;
+}
+.bar * {
+    height: 2rem;
+    float: left;
+}
+.bar .woke {
+    color: white;
+    background-color: #ff0000;
+    border-radius: 5px 0 0 5px;
+}
+.bar .woke:hover {
+    background-color: #970000;
+}
+.bar .slightly {
+    color: black;
+    background-color: #ffff00;
+}
+.bar .slightly:hover {
+    background-color: #9f9f03;
+}
+.bar .notwoke {
+    color: black;
+    background-color: #00ff00;
+    border-radius: 0 5px 5px 0;
+}
+.bar .notwoke:hover {
+    background-color: #009700;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+  
+.tooltip .target {
+    visibility: hidden;
+    width: 10rem;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    height: 1.5rem;
+    position: absolute;
+    z-index: 1;
+
+    bottom: 120%;
+    left: 50%;
+    margin-left: -5rem;
+}
+  
+.tooltip:hover .target {
+    visibility: visible;
+}
 @media only screen and (max-width: 768px) {
     .banner {
         max-width: 100px;
