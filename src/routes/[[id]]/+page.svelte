@@ -103,6 +103,7 @@
                         <div class="target">Not Woke: {(100 - (wokePercentage + slightlyWokePercentage)).toFixed(2)}%</div>
                     </div>
                 </div>
+                <footer>(tap/hover to view percentage)</footer>
                 {:else}
                 sorry, we couldn't obtain this player's games. try checking privacy settings.<br>(games have to be set to public for this to work)
                 {/if}
