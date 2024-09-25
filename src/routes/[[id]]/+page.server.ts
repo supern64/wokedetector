@@ -1,10 +1,9 @@
 import SteamID from "steamid";
-import * as Resolver from "steamid-resolver";
 import { parse } from "csv-parse/sync";
 import { STEAM_API_KEY } from "$env/static/private";
 import type { GameData } from "$lib";
-const STEAM_API_URL = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=KEY&steamid=STEAMID"
 
+const STEAM_API_URL = "http://api.steampowered.com/"
 
 enum WokeLevel {
     WOKE = "-1",
@@ -22,37 +21,52 @@ export async function load({ params, fetch }) {
     }
 
     // find REAL steamid
-    const url_match = params.id.match(/[0-9]{17}/)
+    const id_match = params.id.match(/[0-9]{17}/) // any string of 17 numbers (in /profile/ urls and by themselves)
+    const vanity_url_match = params.id.match(/steamcommunity.com\/id\/([0-z]+)\/?/) // from vanity urls
+
     let sid;
     try {
-        sid = new SteamID(url_match ? url_match[0] : params.id)
-    } catch (e) {
-        try {
-            sid = new SteamID(await Resolver.customUrlToSteamID64(params.id))
-        } catch (e) {
-            return {found: false, lastUpdate}
+        // Steam64 ID from URL / Other types of SteamID
+        sid = new SteamID(id_match ? id_match[0] : params.id)
+    } catch (e) { 
+        let attemptUser: string;
+        if (vanity_url_match) { // "steamcommunity.com/id/SuperN64"
+            attemptUser = vanity_url_match[1]
+        } else { // "SuperN64"
+            attemptUser = params.id
         }
+        const url = (STEAM_API_URL + "ISteamUser/ResolveVanityURL/v1/?vanityurl=USER&key=KEY")
+            .replace("USER", attemptUser)
+            .replace("KEY", STEAM_API_KEY)
+
+        const data = await (await fetch(url)).json()
+
+        if (data.response.success != 1) return {found: false, lastUpdate}
+        sid = new SteamID(data.response.steamid) // guaranteed valid id
     }
     
     // found id, time for basic player info (if the player even exists)
     const sid64 = sid.getSteamID64();
-    let playerInfo;
-    try {
-        playerInfo = await Resolver.steamID64ToFullInfo(sid64);
-    } catch (e) {
-        return {found: false, lastUpdate}
-    }
+    const playerInfoURL = (STEAM_API_URL + "ISteamUser/GetPlayerSummaries/v2/?key=KEY&steamids=STEAMID")
+        .replace("KEY", STEAM_API_KEY)
+        .replace("STEAMID", sid64)
+    const playerInfos = await (await fetch(playerInfoURL)).json();
+
+    if (playerInfos.response.players.length === 0) return {found: false, lastUpdate} // player not found :(
+    const playerInfo = playerInfos.response.players[0]
 
     // and now, time for their games
-    const url = STEAM_API_URL.replace("KEY", STEAM_API_KEY).replace("STEAMID", sid64);
-    const res = await (await fetch(url)).json();
+    const gameListURL = (STEAM_API_URL + "IPlayerService/GetOwnedGames/v1/?key=KEY&steamid=STEAMID")
+        .replace("KEY", STEAM_API_KEY)
+        .replace("STEAMID", sid64);
+    const res = await (await fetch(gameListURL)).json();
     
     if (!res.response.games) {
         return {
             found: true,
             info: {
-                name: playerInfo.steamID[0],
-                avatar: playerInfo.avatarFull[0]
+                name: playerInfo.personaname,
+                avatar: playerInfo.avatar
             },
             games: null,
             lastUpdate
@@ -89,8 +103,8 @@ export async function load({ params, fetch }) {
     return {
         found: true,
         info: {
-            name: playerInfo.steamID[0],
-            avatar: playerInfo.avatarFull[0]
+            name: playerInfo.personaname,
+            avatar: playerInfo.avatar
         },
         games: {
             count: {
