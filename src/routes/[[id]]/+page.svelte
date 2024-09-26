@@ -109,7 +109,11 @@
                 {/if}
                     
                 {:else}
+                {#if data.error}
+                    vanity lookup failed. try using the Steam64 ID directly.
+                {:else}
                     player not found! check ur SteamIDs
+                {/if}
                 {/if}
             {/if}
         </div>

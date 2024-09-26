@@ -1,4 +1,5 @@
 import SteamID from "steamid";
+import * as Resolver from "steamid-resolver";
 import { parse } from "csv-parse/sync";
 import { STEAM_API_KEY } from "$env/static/private";
 import type { GameData } from "$lib";
@@ -17,7 +18,7 @@ export async function load({ params, fetch }) {
 
     // rejection
 	if (!params.id) {
-        return {found: false, lastUpdate}
+        return {found: false, error: false, lastUpdate}
     }
 
     // find REAL steamid
@@ -38,11 +39,23 @@ export async function load({ params, fetch }) {
         const url = (STEAM_API_URL + "ISteamUser/ResolveVanityURL/v1/?vanityurl=USER&key=KEY")
             .replace("USER", attemptUser)
             .replace("KEY", STEAM_API_KEY)
+        
 
-        const data = await (await fetch(url)).json()
-
-        if (data.response.success != 1) return {found: false, lastUpdate}
-        sid = new SteamID(data.response.steamid) // guaranteed valid id
+        const apiVanityResponse = await fetch(url);
+        if (apiVanityResponse.ok) { // god i love ratelimits
+            const json = await apiVanityResponse.json();
+            if (json.response.success != 1) return {found: false, error: false, lastUpdate}
+            sid = new SteamID(json.response.steamid) // guaranteed valid id
+        } else {
+            try {
+                sid = new SteamID(await Resolver.customUrlToSteamID64(attemptUser))
+            } catch (e: any) {
+                if (e[0] === "The specified profile could not be found.") return {found: false, error: false, lastUpdate}
+                return {found: false, error: true, lastUpdate}
+            }
+        }
+        
+         
     }
     
     // found id, time for basic player info (if the player even exists)
@@ -64,6 +77,7 @@ export async function load({ params, fetch }) {
     if (!res.response.games) {
         return {
             found: true,
+            error: false,
             info: {
                 name: playerInfo.personaname,
                 avatar: playerInfo.avatar
@@ -102,6 +116,7 @@ export async function load({ params, fetch }) {
     }
     return {
         found: true,
+        error: false,
         info: {
             name: playerInfo.personaname,
             avatar: playerInfo.avatar
