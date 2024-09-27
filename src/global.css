@@ -64,10 +64,15 @@ th, td {
     height: 2rem;
     float: left;
 }
+.left-edge {
+    border-radius: 5px 0 0 5px;
+}
+.right-edge {
+    border-radius: 0 5px 5px 0;
+}
 .bar .woke {
     color: white;
     background-color: #ff0000;
-    border-radius: 5px 0 0 5px;
 }
 .bar .woke:hover {
     background-color: #970000;
@@ -82,7 +87,6 @@ th, td {
 .bar .notwoke {
     color: black;
     background-color: #00ff00;
-    border-radius: 0 5px 5px 0;
 }
 .bar .notwoke:hover {
     background-color: #009700;

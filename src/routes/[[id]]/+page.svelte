@@ -95,13 +95,13 @@
                                 {/if}<br>
                             </h2>
                             <div class="bar">
-                                <div class="woke tooltip" style:width="{wokePercentage}%">
+                                <div class="woke tooltip" class:left-edge={wokePercentage > 0} style:width="{wokePercentage}%">
                                     <div class="target">Woke: {wokePercentage.toFixed(2)}%</div>
                                 </div>
-                                <div class="slightly tooltip" style:width="{slightlyWokePercentage}%">
+                                <div class="slightly tooltip" class:left-edge={wokePercentage === 0} class:right-edge={wokePercentage + slightlyWokePercentage >= 100} style:width="{slightlyWokePercentage}%">
                                     <div class="target">Slightly: {slightlyWokePercentage.toFixed(2)}%</div>
                                 </div>
-                                <div class="notwoke tooltip" style:width="{100 - (wokePercentage + slightlyWokePercentage)}%">
+                                <div class="notwoke tooltip right-edge" style:width="{100 - (wokePercentage + slightlyWokePercentage)}%">
                                     <div class="target">Not Woke: {(100 - (wokePercentage + slightlyWokePercentage)).toFixed(2)}%</div>
                                 </div>
                             </div>
