@@ -101,7 +101,7 @@
                                 <div class="slightly tooltip" class:left-edge={wokePercentage === 0} class:right-edge={wokePercentage + slightlyWokePercentage >= 100} style:width="{slightlyWokePercentage}%">
                                     <div class="target">Slightly: {slightlyWokePercentage.toFixed(2)}%</div>
                                 </div>
-                                <div class="notwoke tooltip right-edge" style:width="{100 - (wokePercentage + slightlyWokePercentage)}%">
+                                <div class="notwoke tooltip right-edge" class:left-edge={wokePercentage + slightlyWokePercentage === 0} style:width="{100 - (wokePercentage + slightlyWokePercentage)}%">
                                     <div class="target">Not Woke: {(100 - (wokePercentage + slightlyWokePercentage)).toFixed(2)}%</div>
                                 </div>
                             </div>
