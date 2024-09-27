@@ -9,6 +9,7 @@
 	export let data;
     import { page } from "$app/stores";
     import GameTable from '$lib/gameTable.svelte';
+    import Layout from '../+layout.svelte';
     let steamid = $page.params.id ? $page.params.id : ""
 
     $: games = data.games;
@@ -78,42 +79,45 @@
         <div>
             {#if $page.params.id}
                 {#if data.found && data.info}
-                <div>
-                    <img src={data.info.avatar} alt={data.info.name + "'s Steam Avatar"} class="avatar">
-                    <span style="font-weight: bold; font-size: 1.7rem; margin-left: 0.5rem; vertical-align: middle;">{decode(data.info.name)}'s Profile</span>
-                </div>
-                {#if games}
-                <h2>Result: 
-                    {#if wokePercentage > 65 || wokePercentage + slightlyWokePercentage > 75}
-                    <span style="color: #ff0000">WOKE!!!!!</span>
-                    {:else if wokePercentage > 40 || wokePercentage + slightlyWokePercentage > 50}
-                    <span style="color: #e0c600">SLIGHTLY WOKE...</span>
+                    <div>
+                        <img src={data.info.avatar} alt={data.info.name + "'s Steam Avatar"} class="avatar">
+                        <span style="font-weight: bold; font-size: 1.7rem; margin-left: 0.5rem; vertical-align: middle;">{decode(data.info.name)}'s Profile</span>
+                    </div>
+                    {#if games}
+                        {#if games.count.counted > 0}
+                            <h2>Result: 
+                                {#if wokePercentage > 65 || wokePercentage + slightlyWokePercentage > 75}
+                                    <span style="color: #ff0000">WOKE!!!!!</span>
+                                {:else if wokePercentage > 40 || wokePercentage + slightlyWokePercentage > 50}
+                                    <span style="color: #e0c600">SLIGHTLY WOKE...</span>
+                                {:else}
+                                    <span style="color: #00ff00">NOT WOKE!!</span>
+                                {/if}<br>
+                            </h2>
+                            <div class="bar">
+                                <div class="woke tooltip" style:width="{wokePercentage}%">
+                                    <div class="target">Woke: {wokePercentage.toFixed(2)}%</div>
+                                </div>
+                                <div class="slightly tooltip" style:width="{slightlyWokePercentage}%">
+                                    <div class="target">Slightly: {slightlyWokePercentage.toFixed(2)}%</div>
+                                </div>
+                                <div class="notwoke tooltip" style:width="{100 - (wokePercentage + slightlyWokePercentage)}%">
+                                    <div class="target">Not Woke: {(100 - (wokePercentage + slightlyWokePercentage)).toFixed(2)}%</div>
+                                </div>
+                            </div>
+                        <footer>(tap/hover to view percentage)</footer>
+                        {:else}
+                            we detected games in your library, but none of them could be counted.
+                        {/if}
                     {:else}
-                    <span style="color: #00ff00">NOT WOKE!!</span>
-                    {/if}<br>
-                </h2>
-                <div class="bar">
-                    <div class="woke tooltip" style:width="{wokePercentage}%">
-                        <div class="target">Woke: {wokePercentage.toFixed(2)}%</div>
-                    </div>
-                    <div class="slightly tooltip" style:width="{slightlyWokePercentage}%">
-                        <div class="target">Slightly: {slightlyWokePercentage.toFixed(2)}%</div>
-                    </div>
-                    <div class="notwoke tooltip" style:width="{100 - (wokePercentage + slightlyWokePercentage)}%">
-                        <div class="target">Not Woke: {(100 - (wokePercentage + slightlyWokePercentage)).toFixed(2)}%</div>
-                    </div>
-                </div>
-                <footer>(tap/hover to view percentage)</footer>
+                        sorry, we couldn't obtain this player's games. try checking privacy settings.<br>(games have to be set to public for this to work)
+                    {/if}
                 {:else}
-                sorry, we couldn't obtain this player's games. try checking privacy settings.<br>(games have to be set to public for this to work)
-                {/if}
-                    
-                {:else}
-                {#if data.error}
-                    vanity lookup failed. try using the Steam64 ID directly.
-                {:else}
-                    player not found! check ur SteamIDs
-                {/if}
+                    {#if data.error}
+                        vanity lookup failed. try using the Steam64 ID directly.
+                    {:else}
+                        player not found! check ur SteamIDs
+                    {/if}
                 {/if}
             {/if}
         </div>
