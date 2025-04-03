@@ -30,29 +30,17 @@
 
     const columns = table.createColumns([
         table.column({
-            header: 'Name',
-            accessor: (item) => { return {name: item.name, banner: item.banner} },
-            cell: ({ value }) => {
-                return createRender(Title, {
-                    name: value.name,
-                    banner: value.banner
-                })
-            }
-        }),
-        table.column({
-            header: 'Wokeness',
-            accessor: 'woke',
+            header: 'Game',
+            accessor: (item) => { return {name: item.name, banner: item.banner, woke: item.woke} },
             plugins: {
                 colFilter: {
                     fn: ({ filterValue, value }) => {
-                        return filterValue == null || filterValue === value
+                        return filterValue == null || filterValue === value.woke
                     }
                 }
             },
             cell: ({ value }) => {
-                return createRender(Woke, {
-                    woke: value
-                });
+                return createRender(Title, value)
             }
         }),
         table.column({
@@ -87,8 +75,7 @@
 {/if}
 <table {...$tableAttrs}>
     <colgroup>
-        <col style="width: 25%">
-        <col style="width: 5%">
+        <col style="width: 20%">
     </colgroup>
     <thead>
         {#each $headerRows as headerRow (headerRow.id)}
