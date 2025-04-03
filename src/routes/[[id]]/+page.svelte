@@ -124,9 +124,10 @@
     </center>
     {#if games}
     <div>
-        <h2>Games List</h2>
-        <footer style="margin-bottom: 0.5rem;">(counted {games.count.counted}/{games.count.all} games or {(games.count.counted/games.count.all*100).toFixed(2)}%)</footer>
-        <GameTable paginate={false} games={games.list} />
+        <GameTable paginate={false} games={games.list} let:all let:filtered>
+            <h2>Game List ({all} counted{#if all !== filtered}, {filtered} results{/if})</h2>
+            <footer style="margin-bottom: 0.5rem;">(counted {games.count.counted}/{games.count.all} games or {(games.count.counted/games.count.all*100).toFixed(2)}%)</footer>
+        </GameTable>
     </div>
     {/if}
 </div>

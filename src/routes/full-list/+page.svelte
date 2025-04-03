@@ -35,8 +35,9 @@
         csv available <a data-sveltekit-reload href="/data.csv">here</a>, last updated {dayjs(data.lastUpdate).fromNow()}</footer>
     </center>
     <div>
-        <h2>Games List ({data.games.length} total)</h2>
-        <GameTable games={data.games} />
+        <GameTable games={data.games} let:all let:filtered>
+            <h2>Game List ({all} total{#if all !== filtered}, {filtered} results{/if})</h2>
+        </GameTable>
     </div>
 </div>
 

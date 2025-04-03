@@ -53,11 +53,11 @@
         })
     ]);
     
-    const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates } = table.createViewModel(columns);
+    const { headerRows, rows, pageRows, tableAttrs, tableBodyAttrs, pluginStates } = table.createViewModel(columns);
     const { pageIndex, pageCount, hasNextPage, hasPreviousPage } = pluginStates.paginate;
     const { filterValues } = pluginStates.colFilter;
 </script>
-
+<slot all={games.length} filtered={$rows.length}></slot>
 <div style="margin-bottom: 1rem; display: flex; gap: 1rem; flex-direction: row;">
     <input type="text" class="textbox" style="flex: 1" id="search" placeholder="Search A Game" bind:value={filterValue}>
     <select id="wokeness" class="textbox" bind:value={$filterValues.woke}>
