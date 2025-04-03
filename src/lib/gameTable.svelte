@@ -31,6 +31,7 @@
     const columns = table.createColumns([
         table.column({
             header: 'Game',
+            id: 'woke', // required for filter to work
             accessor: (item) => { return {name: item.name, banner: item.banner, woke: item.woke} },
             plugins: {
                 colFilter: {
