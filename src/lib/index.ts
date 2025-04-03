@@ -3,5 +3,6 @@ export interface GameData {
     name: string,
     banner: string,
     woke: string,
-    description: string
+    description: string,
+    review_link: "undefined" | string
 }

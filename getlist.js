@@ -38,12 +38,16 @@ fetch(mainUrl + "&count=1")
             const banner = $(rec).find('a img').attr('src');
             const woke = mapping[$(rec).find('span').attr('class')];
             const description = $(rec).find('.recommendation_desc').text().trim().replace(/"/g, '""');
+            let review_link = $(rec).find('.recommendation_readmore').children("a").next().attr("href")
 
-            games.push(`${id},"${name}","${banner}",${woke},"${description}"`);
+            if (review_link && review_link.startsWith("https://steamcommunity.com/linkfilter/?u=")) {
+                review_link = decodeURIComponent(review_link.replace("https://steamcommunity.com/linkfilter/?u=", ""))
+            }
+            games.push(`${id},"${name}","${banner}",${woke},"${description}","${review_link}"`);
         });
 
         // Write to CSV file
-        fs.writeFileSync("static/data.csv", "appid,name,banner,woke,description\n" + games.join('\n'), 'utf-8');
+        fs.writeFileSync("static/data.csv", "appid,name,banner,woke,description,review_link\n" + games.join('\n'), 'utf-8');
         fs.writeFileSync("static/last_update.txt", (new Date()).toISOString(), 'utf-8');
         console.log("Done");
     })

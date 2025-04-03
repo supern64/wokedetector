@@ -7,6 +7,7 @@
     import type { GameData } from '$lib';
     import Title from '$lib/title.svelte';
     import Woke from '$lib/woke.svelte';
+    import Description from './description.svelte';
 
     export let games: GameData[];
     export let paginate = true;
@@ -56,8 +57,10 @@
         }),
         table.column({
             header: 'Description',
-            accessor: 'description',
-            cell: ({ value }) => decode(value)
+            accessor: (item) => { return {description: item.description, reviewLink: item.review_link} },
+            cell: ({ value }) => {
+                return createRender(Description, value);
+            }
         })
     ]);
     
