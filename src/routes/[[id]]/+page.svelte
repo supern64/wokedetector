@@ -143,7 +143,11 @@
     <div>
         <GameTable paginate={false} games={games.list} showPlaytime let:all let:filtered>
             <h2>Game List ({all} counted{#if all !== filtered}, {filtered} results{/if})</h2>
-            <footer style="margin-bottom: 0.5rem;">(counted {games.count.counted}/{games.count.all} games or {(games.count.counted/games.count.all*100).toFixed(2)}%)</footer>
+            {#if calculateBy === "games"}
+                <footer style="margin-bottom: 0.5rem;">(counted {games.count.counted}/{games.count.all} games or {(games.count.counted/games.count.all*100).toFixed(2)}%)</footer>
+            {:else}
+                <footer style="margin-bottom: 0.5rem;">(counted {(games.playtime.counted/60).toFixed(1)}/{(games.playtime.all/60).toFixed(1)} hours or {(games.playtime.counted/games.playtime.all*100).toFixed(2)}%)</footer>
+            {/if}
         </GameTable>
     </div>
     {/if}

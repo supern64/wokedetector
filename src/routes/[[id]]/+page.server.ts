@@ -97,7 +97,7 @@ export async function load({ params, fetch }) {
     let wokeCount = 0, slightlyWokeCount = 0, notWokeCount = 0//, ignoredGames = 0;
     let wokePlaytime = 0, slightlyWokePlaytime = 0, notWokePlaytime = 0, totalPlaytime = 0;
     for (const game of res.response.games) {
-        totalPlaytime = game.playtime_forever;
+        totalPlaytime += game.playtime_forever;
         if (!GAMES[game.appid]) {
             //ignoredGames += 1;
             continue;
