@@ -92,8 +92,8 @@
                     </div>
                     {#if games}
                         {#if games.count.counted > 0}
-                            <div style="margin-top: 0.5rem">
-                                Calculate wokeness by:
+                            <div style="margin-top: 0.5rem;">
+                                Calculate wokeness by:<br>
                                 <label>
                                     <input type="radio" name="calculateBy" value="playtime" bind:group={calculateBy}> Playtime
                                 </label>

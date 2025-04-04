@@ -30,8 +30,8 @@
 <div class="pad-l">
     <center>
         <h1 style="margin-bottom: 0.2rem">The Woke Ranking</h1>
-        (according to the woke content detector steam group)<br><br>
-        <footer>click <a href="/">here</a> to compare your steam games against this list<br>
+        (from the woke content detector steam group)<br><br>
+        <footer>click <a href="/">here</a> to compare your steam games to this list<br>
         csv available <a data-sveltekit-reload href="/data.csv">here</a>, last updated {dayjs(data.lastUpdate).fromNow()}</footer>
     </center>
     <div>

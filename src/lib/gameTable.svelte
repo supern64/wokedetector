@@ -68,8 +68,8 @@
     const { filterValues } = pluginStates.colFilter;
 </script>
 <slot all={games.length} filtered={$rows.length}></slot>
-<div style="margin-bottom: 1rem; display: flex; gap: 1rem; flex-direction: row;">
-    <input type="text" class="textbox" style="flex: 1" id="search" placeholder="Search A Game" bind:value={filterValue}>
+<div class="search">
+    <input type="text" class="textbox searchbox" id="search" placeholder="Search A Game" bind:value={filterValue}>
     <select id="wokeness" class="textbox" bind:value={$filterValues.woke}>
         <option value={null}>None</option>
         <option value="1">Not Woke</option>
@@ -78,10 +78,10 @@
       </select>
 </div>
 {#if paginate}
-<div style="margin-bottom: 1rem; display: flex; gap: 1rem; justify-content: center; align-items: center;">
+<div class="pagination">
     <button class="btn" disabled={!$hasPreviousPage} on:click={() => {if ($hasPreviousPage) $pageIndex -= 1}}>Previous</button>
-    <span>Page {$pageIndex + 1} of {$pageCount}</span>
-    <button class="btn" disabled={!$hasNextPage} on:click={() => {if ($hasNextPage) $pageIndex += 1}}>Next</button>
+    <div style="justify-self: center">Page {$pageIndex + 1} of {$pageCount}</div>
+    <button class="btn" disabled={!$hasNextPage} on:click={() => {if ($hasNextPage) $pageIndex += 1; window.scrollTo(0, 0)}}>Next</button>
 </div>
 {/if}
 <table {...$tableAttrs}>
@@ -120,9 +120,9 @@
     </tbody>
 </table>
 {#if paginate}
-<div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; align-items: center;">
+<div class="pagination">
     <button class="btn" disabled={!$hasPreviousPage} on:click={() => {if ($hasPreviousPage) $pageIndex -= 1}}>Previous</button>
-    <span>Page {$pageIndex + 1} of {$pageCount}</span>
+    <div style="justify-self: center">Page {$pageIndex + 1} of {$pageCount}</div>
     <button class="btn" disabled={!$hasNextPage} on:click={() => {if ($hasNextPage) $pageIndex += 1; window.scrollTo(0, 0)}}>Next</button>
 </div>
 {/if}
@@ -132,5 +132,29 @@
             padding: 0.2rem;
             font-size: 1rem;
         }
+        .pagination {
+            margin: 0.2rem auto 0.2rem auto;
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            grid-template-columns: 0.7fr 1fr 0.7fr;
+        }
     }
+    @media only screen and (min-width: 768px) {
+        .pagination {
+            margin: 1rem auto 1rem auto;
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            grid-template-columns: 0.2fr 0.3fr 0.2fr;
+            max-width: 50%;
+        }
+    }
+    .search {
+        margin-bottom: 1rem;
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 2fr 1fr
+    }
+
 </style>
