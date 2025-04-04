@@ -12,12 +12,19 @@
     import Layout from '../+layout.svelte';
     let steamid = $page.params.id ? $page.params.id : ""
 
+    let calculateBy: "playtime" | "games" = "playtime";
     $: games = data.games;
     let wokePercentage = 0, slightlyWokePercentage = 0;
     $: if (games) {
         // parse info
-        wokePercentage = games.count.woke/games.count.counted*100;
-        slightlyWokePercentage = games.count.slightly_woke/games.count.counted*100;
+        if (calculateBy === "games") {
+            wokePercentage = games.count.woke/games.count.counted*100;
+            slightlyWokePercentage = games.count.slightly_woke/games.count.counted*100;
+        } else {
+            wokePercentage = games.playtime.woke/games.playtime.counted*100;
+            slightlyWokePercentage = games.playtime.slightly_woke/games.playtime.counted*100;
+        }
+        
     }
 
     /** @type {HTMLAnchorElement} */
@@ -85,6 +92,16 @@
                     </div>
                     {#if games}
                         {#if games.count.counted > 0}
+                            <div style="margin-top: 0.5rem">
+                                Calculate wokeness by:
+                                <label>
+                                    <input type="radio" name="calculateBy" value="playtime" bind:group={calculateBy}> Playtime
+                                </label>
+                                <label>
+                                    <input type="radio" name="calculateBy" value="games" bind:group={calculateBy}> Number of games
+                                </label>
+                            </div>
+                            
                             <h2>Result: 
                                 {#if wokePercentage > 65 || wokePercentage + slightlyWokePercentage > 75}
                                     <span style="color: #ff0000">WOKE!!!!!</span>
@@ -124,7 +141,7 @@
     </center>
     {#if games}
     <div>
-        <GameTable paginate={false} games={games.list} let:all let:filtered>
+        <GameTable paginate={false} games={games.list} showPlaytime let:all let:filtered>
             <h2>Game List ({all} counted{#if all !== filtered}, {filtered} results{/if})</h2>
             <footer style="margin-bottom: 0.5rem;">(counted {games.count.counted}/{games.count.all} games or {(games.count.counted/games.count.all*100).toFixed(2)}%)</footer>
         </GameTable>

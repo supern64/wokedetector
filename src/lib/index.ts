@@ -4,5 +4,6 @@ export interface GameData {
     banner: string,
     woke: "-1" | "0" | "1",
     description: string,
-    review_link: "undefined" | string
+    review_link: "undefined" | string,
+    playtime?: number
 }

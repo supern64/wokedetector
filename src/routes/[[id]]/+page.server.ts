@@ -69,7 +69,7 @@ export async function load({ params, fetch }) {
     const playerInfo = playerInfos.response.players[0]
 
     // and now, time for their games
-    const gameListURL = (STEAM_API_URL + "IPlayerService/GetOwnedGames/v1/?key=KEY&steamid=STEAMID")
+    const gameListURL = (STEAM_API_URL + "IPlayerService/GetOwnedGames/v1/?key=KEY&steamid=STEAMID&include_played_free_games=true")
         .replace("KEY", STEAM_API_KEY)
         .replace("STEAMID", sid64);
     const res = await (await fetch(gameListURL)).json();
@@ -94,22 +94,27 @@ export async function load({ params, fetch }) {
     }) as {[key: string]: GameData};
 
     const gameList = [];
-    let wokeCount = 0, slightlyWokeCount = 0, notWokeCount = 0, ignoredGames = 0;
+    let wokeCount = 0, slightlyWokeCount = 0, notWokeCount = 0//, ignoredGames = 0;
+    let wokePlaytime = 0, slightlyWokePlaytime = 0, notWokePlaytime = 0, totalPlaytime = 0;
     for (const game of res.response.games) {
+        totalPlaytime = game.playtime_forever;
         if (!GAMES[game.appid]) {
-            ignoredGames += 1;
+            //ignoredGames += 1;
             continue;
         }
-        const gameInfo = GAMES[game.appid]
+        const gameInfo = {playtime: game.playtime_forever as number, ...GAMES[game.appid]}
         switch (gameInfo.woke) {
             case WokeLevel.WOKE:
                 wokeCount += 1;
+                wokePlaytime += game.playtime_forever;
                 break;
             case WokeLevel.SLIGHTLY_WOKE:
                 slightlyWokeCount += 1;
+                slightlyWokePlaytime += game.playtime_forever;
                 break;
             case WokeLevel.NOT_WOKE:
                 notWokeCount += 1;
+                notWokePlaytime += game.playtime_forever;
                 break;
         }
         gameList.push(gameInfo)
@@ -128,6 +133,13 @@ export async function load({ params, fetch }) {
                 woke: wokeCount,
                 slightly_woke: slightlyWokeCount,
                 not_woke: notWokeCount
+            },
+            playtime: {
+                all: totalPlaytime,
+                counted: wokePlaytime + slightlyWokePlaytime + notWokePlaytime,
+                woke: wokePlaytime,
+                slightly_woke: slightlyWokePlaytime,
+                not_woke: notWokePlaytime
             },
             list: gameList
         },

@@ -1,16 +1,16 @@
 <script lang="ts">
-    import he from 'he';
     import Fuse from 'fuse.js';
     import { writable } from 'svelte/store';
     import { createTable, createRender, Subscribe, Render } from "svelte-headless-table";
-    import { addPagination, addColumnFilters } from "svelte-headless-table/plugins"
+    import { addPagination, addColumnFilters, addSortBy } from "svelte-headless-table/plugins"
     import type { GameData } from '$lib';
     import Title from '$lib/title.svelte';
-    import Woke from '$lib/woke.svelte';
     import Description from './description.svelte';
+    import Page from '../routes/[[id]]/+page.svelte';
 
     export let games: GameData[];
     export let paginate = true;
+    export let showPlaytime = false;
 
     $: filterValue = "";
     const fuse = new Fuse(games, {
@@ -18,25 +18,35 @@
         threshold: 0.35,
         minMatchCharLength: 1
     });
-    const {decode} = he;
-    const dataStore = writable(games as GameData[]);
+    
+    const dataStore = writable(games);
 
     $: $dataStore = filterValue.length != 0 ? fuse.search(filterValue).map((i) => i.item) : games;
     
     const table = createTable(dataStore, {
         colFilter: addColumnFilters(),
-        paginate: addPagination({ initialPageSize: paginate ? 20 : games.length })
+        paginate: addPagination({ initialPageSize: paginate ? 20 : games.length }),
+        sort: addSortBy({ initialSortKeys: [{id: "woke", order: "asc"}]})
     });
 
     const columns = table.createColumns([
         table.column({
             header: 'Game',
             id: 'woke', // required for filter to work
-            accessor: (item) => { return {name: item.name, banner: item.banner, woke: item.woke} },
+            accessor: (item) => { return {name: item.name, banner: item.banner, woke: item.woke, playtime: item.playtime, showPlaytime} },
             plugins: {
                 colFilter: {
                     fn: ({ filterValue, value }) => {
                         return filterValue == null || filterValue === value.woke
+                    }
+                },
+                sort: {
+                    compareFn: (left, right) => {
+                        if (showPlaytime && left.playtime !== right.playtime) {
+                            return right.playtime - left.playtime;
+                        } else {
+                            return left.name.localeCompare(right.name);
+                        }
                     }
                 }
             },
