@@ -45,7 +45,7 @@
                         if (showPlaytime && left.playtime !== right.playtime) {
                             return right.playtime - left.playtime;
                         } else {
-                            return left.name.localeCompare(right.name);
+                            return 0;
                         }
                     }
                 }
